@@ -57,6 +57,14 @@
 library(datasets)
 library(data.table)
 
+if (!file.exists("Data")){
+  dir.create("Data")
+}
+
+fileUrl <- "https://archive.ics.uci.edu/ml/datasets/Individual+household+electric+power+consumption"
+download.file(fileUrl, destfile = "./Data/household_power_consumption.txt", method = "curl")
+# list.files("./Data")
+
 data <- read.table("household_power_consumption.txt", header = TRUE, sep = ";")
 data_subset <- data[data.matrix(data$Date) == "1/2/2007" | data.matrix(data$Date) == "2/2/2007" , ]
 

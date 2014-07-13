@@ -55,23 +55,7 @@
 ##
 
 library(datasets)
-# # library(sqldf)
 library(data.table)
-# # library(plyr)
-# 
-# # install.packages('quantmod')
-# library(quantmod)
-
-if (!file.exists("Data")){
-  dir.create("Data")
-}
-
-fileUrl <- "https://archive.ics.uci.edu/ml/datasets/Individual+household+electric+power+consumption"
-download.file(fileUrl, destfile = "./Data/household_power_consumption.txt", method = "curl")
-# list.files("./Data")
-
-# data <- read.csv("./Data/household_power_consumption.txt", sep = ";")
-# data <- read.csv("household_power_consumption.txt", sep = ";")
 
 data <- read.table("household_power_consumption.txt", header = TRUE, sep = ";")
 data_subset <- data[data.matrix(data$Date) == "1/2/2007" | data.matrix(data$Date) == "2/2/2007" , ]
@@ -85,32 +69,6 @@ data_grp <- as.numeric(data.matrix(data_subset$Global_reactive_power))  # Extrac
 data_date <- data.matrix(data_subset$Date)                              # Extract column of 'Date'
 
 g_range <- range(0, data_sub_metering_1, data_sub_metering_2, data_sub_metering_3)  # Calculate range from 0 to max value of above three sub meterings
-
-#--- Plot 2 ---
-# plot(data_gap, type = "l", xlab = "", ylab = "Global Active Power (kilowatts)", xaxt = 'n')
-# axis(1, tick = TRUE, 
-#      at = c(1, nrow(data[data.matrix(data$Date) == "1/2/2007", ])+1, nrow(data_subset)), 
-#      lab = c("Thu", "Fri", "Sat"))
-
-
-#--- Plot 3 ---
-
-# plot(data_sub_metering_1, type = "l", xlab = "", ylab = "Energy sub metering", 
-#      xaxt = 'n', col = "black", ylim = g_range)
-# par(new = TRUE)
-# plot(data_sub_metering_2, type = "l", xlab = "", ylab = "", 
-#      xaxt = 'n', col = "red", ylim = g_range)
-# par(new = TRUE)
-# plot(data_sub_metering_3, type = "l", xlab = "", ylab = "", 
-#      xaxt = 'n', col = "blue", ylim = g_range)
-# 
-# axis(1, tick = TRUE, 
-#      at = c(1, nrow(data[data.matrix(data$Date) == "1/2/2007", ])+1, nrow(data_subset)), 
-#      lab = c("Thu", "Fri", "Sat"))
-# legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), 
-#        col = c("black", "red", "blue"),
-#        cex = 0.9, lty = 1)
-
 
 #--- Plot 4 ---
 png(filename = "plot4.png", height = 480, width = 480, bg = "white")
@@ -131,18 +89,19 @@ with(airquality, {
   plot(data_sub_metering_1, type = "l", xlab = "", ylab = "Energy sub metering", 
        xaxt = 'n', col = "black", ylim = g_range)
   par(new = TRUE)
-  plot(data_sub_metering_2, type = "l", xlab = "", ylab = "", 
-       xaxt = 'n', col = "red", ylim = g_range)
+  plot(data_sub_metering_2, type = "l", xlab = "", ylab = "", bty = 'n',
+       xaxt = 'n', yaxt = 'n', col = "red", ylim = g_range)
   par(new = TRUE)
-  plot(data_sub_metering_3, type = "l", xlab = "", ylab = "", 
-       xaxt = 'n', col = "blue", ylim = g_range)
+  plot(data_sub_metering_3, type = "l", xlab = "", ylab = "", bty = 'n',
+       xaxt = 'n', yaxt = 'n', col = "blue", ylim = g_range)
   
   axis(1, tick = TRUE, 
        at = c(1, nrow(data[data.matrix(data$Date) == "1/2/2007", ])+1, nrow(data_subset)), 
        lab = c("Thu", "Fri", "Sat"))
   legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), 
          col = c("black", "red", "blue"),
-         cex = 0.9, lty = 1)
+         bty = 'n',             # No box on legend
+         cex = 1.0, lty = 1)
   
   #--- Plot at top-right ---
   plot(data_voltage, type = "l", xlab = "datetime", ylab = "Voltage", xaxt = 'n')
@@ -158,29 +117,5 @@ with(airquality, {
 })
 
 dev.off()
-
-# ##--- Acquire data from internet and save it into local computer ---
-# # library(sqldf)
-# # library(data.table)
-# # library(plyr)
-# 
-# # install.packages('quantmod')
-# library(quantmod)
-# amzn = getSymbols("AMZN",auto.assign=FALSE)
-# sampleTimes = index(amzn)
-# 
-# # data.frame(date=index(master_1), coredata(master_1))
-# sampleTimes_clean <- sampleTimes[grep("^2012", sampleTimes)]
-# 
-# message("Answer - Part I:")
-# print(length(sampleTimes_clean))
-# 
-# message("Answer - Part II:")
-# print(length(grep("Monday",weekdays(sampleTimes_clean))))
-# 
-# plot(sampleTimes, amzn$AMZN.Adjusted, type = "l")
-
-
-
 
 

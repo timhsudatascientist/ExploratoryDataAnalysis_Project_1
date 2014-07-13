@@ -57,22 +57,12 @@
 library(datasets)
 library(data.table)
 
-if (!file.exists("Data")){
-  dir.create("Data")
-}
-
-fileUrl <- "https://archive.ics.uci.edu/ml/datasets/Individual+household+electric+power+consumption"
-download.file(fileUrl, destfile = "./Data/household_power_consumption.txt", method = "curl")
-# list.files("./Data")
-
 data <- read.table("household_power_consumption.txt", header = TRUE, sep = ";")
 data_subset <- data[data.matrix(data$Date) == "1/2/2007" | data.matrix(data$Date) == "2/2/2007" , ]
 
-# data_gap <- as.numeric(data.matrix(data_subset$Global_active_power))  # Extract column of 'Global Active Power'
 data_sub_metering_1 <- as.numeric(data.matrix(data_subset$Sub_metering_1))  # Extract column of 'Sub-metering_1'
 data_sub_metering_2 <- as.numeric(data.matrix(data_subset$Sub_metering_2))  # Extract column of 'Sub-metering_2'
 data_sub_metering_3 <- as.numeric(data.matrix(data_subset$Sub_metering_3))  # Extract column of 'Sub-metering_3'
-# data_date <- data.matrix(data_subset$Date)                            # Extract column of 'Date'
 
 #--- Plot 3 ---
 png(filename = "plot3.png", height = 480, width = 480, bg = "white")
@@ -82,18 +72,18 @@ g_range <- range(0, data_sub_metering_1, data_sub_metering_2, data_sub_metering_
 plot(data_sub_metering_1, type = "l", xlab = "", ylab = "Energy sub metering", 
      xaxt = 'n', col = "black", ylim = g_range)
 par(new = TRUE)
-plot(data_sub_metering_2, type = "l", xlab = "", ylab = "", 
-     xaxt = 'n', col = "red", ylim = g_range)
+plot(data_sub_metering_2, type = "l", xlab = "", ylab = "", bty = 'n',
+     xaxt = 'n', yaxt = 'n', col = "red", ylim = g_range)
 par(new = TRUE)
-plot(data_sub_metering_3, type = "l", xlab = "", ylab = "", 
-     xaxt = 'n', col = "blue", ylim = g_range)
+plot(data_sub_metering_3, type = "l", xlab = "", ylab = "", bty = 'n',
+     xaxt = 'n', yaxt = 'n', col = "blue", ylim = g_range)
 
 axis(1, tick = TRUE, 
      at = c(1, nrow(data[data.matrix(data$Date) == "1/2/2007", ])+1, nrow(data_subset)), 
      lab = c("Thu", "Fri", "Sat"))
 legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), 
        col = c("black", "red", "blue"),
-       cex = 0.9, lty = 1)
+       cex = 0.95, lty = 1)
 
 dev.off()
 
